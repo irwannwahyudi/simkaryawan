@@ -11,6 +11,14 @@ require 'functions.php';
 //ketika tombol login ditekan
 if (isset($_POST['login'])) {
   $login = login($_POST);
+  if (isset($login['error'])) {
+    echo "<p style='color:red;'>{$login['pesan']}</p>";
+  } else {
+    $_SESSION['login'] = true;
+    $_SESSION['nama'] = $login['user']['nama']; // Ambil dari hasil query fungsi login()
+    header("Location: index.php");
+    exit;
+  }
 }
 
 ?>

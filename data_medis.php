@@ -9,7 +9,7 @@ require 'functions.php';
 $medis = query("SELECT * FROM karyawan WHERE divisi = 'Medis'");
 
 if (isset($_POST['cari'])) {
-  $medis = cari($_POST['keyword']);
+  $medis = cari($_POST['keyword'], 'Medis'); // tambah 'Medis'
 }
 ?>
 
@@ -45,7 +45,7 @@ if (isset($_POST['cari'])) {
 
     <div class="flex-grow-1 pt-4 px-4">
       <div class="mb-4">
-        <h2 class="dashboard-title">DATA KARYAWAN MEDIS</h2>
+        <h2 class="dashboard-title">DATA KARYAWAN <span class="text-success fw-bold">MEDIS</span></h2>
         <p class="text-muted">Rumah Sakit Islam Yogyakarta PDHI</p>
       </div>
 
@@ -89,6 +89,4 @@ if (isset($_POST['cari'])) {
     </div>
   </div>
 </body>
-
-
 </html>

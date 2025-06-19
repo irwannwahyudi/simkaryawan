@@ -1,19 +1,26 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 function koneksi()
 {
-  return mysqli_connect('localhost', 'root', '', 'simkaryawan');
+  global $conn;
+  $conn = mysqli_connect('localhost', 'root', '', 'simkaryawan');
+  return $conn;
 }
 
 function query($query)
 {
+  global $conn;
   $conn = koneksi();
-  $result = mysqli_query($conn, $query);
-
+    $result = mysqli_query($conn, $query);
+    if (!$result) {
+        die("Query Error: " . mysqli_error($conn)); // <== Tambahkan ini dulu untuk cek masalah
+    }
   # jika data hanya 1
-  if (mysqli_num_rows($result) == 1) {
-    return mysqli_fetch_assoc($result);
-  }
+  // if (mysqli_num_rows($result) == 1) {
+  //   return mysqli_fetch_assoc($result);
+  // }
   $rows = [];
   while ($row = mysqli_fetch_assoc($result)) {
     $rows[] = $row;
@@ -172,13 +179,17 @@ function ubah($data)
   return mysqli_affected_rows($conn);
 }
 
-function cari($keyword)
+function cari($keyword, $divisi = null)
 {
   $conn = koneksi();
   $query = "SELECT * FROM karyawan
             WHERE
             nama LIKE '%$keyword%' OR
             nik LIKE '%$keyword%'";
+  if ($divisi) {
+    $query .= " AND divisi = '$divisi'";
+  }
+
   $result = mysqli_query($conn, $query);
   $rows = [];
   while ($row = mysqli_fetch_assoc($result)) {
@@ -190,23 +201,29 @@ function cari($keyword)
 function login($data)
 {
   $conn = koneksi();
-
-  $username = htmlspecialchars($data['username']);
-  $password = htmlspecialchars($data['password']);
+  $username = mysqli_real_escape_string($conn, $data['username']);
+  $password = mysqli_real_escape_string($conn, $data['password']);
+  // $username = htmlspecialchars($data['username']);
+  // $password = htmlspecialchars($data['password']);
 
   // cek dulu username
-  if ($user = query("SELECT * FROM user WHERE username = '$username'")) {
+  $user = query("SELECT * FROM user WHERE username = '$username'");
+  // var_dump($user);
+  // die;
+  if ($user && is_array($user) && isset($user[0])) {
+    $user = $user[0];
     //cek password
-    if (password_verify($password, $user['password'])) {
+    if ($password === $user['password']) {
       //set session
       $_SESSION['login'] = true;
+      $_SESSION['nama'] = $user['nama'];
 
       header("Location: index.php");
       exit;
     }
   }
   return [
-    'error' => true,
+    'error' => true, 
     'pesan' => 'Username / Password Salah!'
   ];
 }
@@ -252,7 +269,8 @@ function registrasi($data)
     return false;
   }
 
-  $password_baru = password_hash($password1, PASSWORD_DEFAULT);
+  $password_baru = $password1; // TANPA HASH
+  // dengan hash : $password_baru = password_hash($password1, PASSWORD_DEFAULT);
 
   // ✅ Tambahkan kolom nama_lengkap di sini
   $query = "INSERT INTO user 

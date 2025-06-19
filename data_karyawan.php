@@ -80,6 +80,7 @@ if (isset($_POST['cari'])) {
                 <td><?= $i++; ?></td>
                 <td><img src="img/<?= htmlspecialchars($m['gambar']); ?>" width="60" alt="Foto"></td>
                 <td><?= htmlspecialchars($m['nama']); ?></td>
+                <td><?= htmlspecialchars($m['divisi']); ?></td>
                 <td><a href="detail.php?id=<?= $m['id']; ?>" class="btn btn-info btn-sm">Lihat Detail</a></td>
               </tr>
             <?php endforeach; ?>
@@ -89,6 +90,4 @@ if (isset($_POST['cari'])) {
     </div>
   </div>
 </body>
-
-
 </html>

@@ -17,7 +17,7 @@ if (!isset($_GET['id'])) {
 $id = $_GET['id'];
 
 //query data karyawan berdasarkan id
-$m = query("SELECT * FROM karyawan WHERE id=$id");
+$m = query("SELECT * FROM karyawan WHERE id=$id")[0];
 
 //cek apakah tombol ubah sudah di klik
 if (isset($_POST['ubah'])) {
