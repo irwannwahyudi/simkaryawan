@@ -50,7 +50,11 @@ if (isset($_POST['cari'])) {
     <div class="flex-grow-1 p-4">
       <!-- Judul -->
       <div class="mb-4">
-        <h2 class="dashboard-title">Selamat Datang di SIM KARYAWAN</h2>
+        <?php if (isset($_SESSION['login']) && isset($_SESSION['nama'])) : ?>
+          <h2 class="dashboard-title">Selamat Datang, <span class="text-success"><?= htmlspecialchars($_SESSION['nama']) ?></span> di SIM KARYAWAN</h2>
+        <?php else : ?>
+          <p>Anda belum login. <a href="login.php">Login di sini</a></p>
+        <?php endif; ?>
         <p class="text-muted">Rumah Sakit Islam Yogyakarta PDHI</p>
       </div>
 
