@@ -9,7 +9,7 @@ require 'functions.php';
 #ambil id dari URL
 $id = $_GET['id'];
 
-$m = query("SELECT * FROM karyawan WHERE id = $id");
+$m = query("SELECT * FROM karyawan WHERE id = $id")[0];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,8 +71,6 @@ $m = query("SELECT * FROM karyawan WHERE id = $id");
       </div>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
