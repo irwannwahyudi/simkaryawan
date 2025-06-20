@@ -65,6 +65,7 @@ if (isset($_POST['cari'])) {
               <th>No</th>
               <th>Foto</th>
               <th>Nama</th>
+              <th>Divisi</th>
               <th>Aksi</th>
             </tr>
           </thead>
